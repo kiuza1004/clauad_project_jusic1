@@ -190,17 +190,110 @@ export const MOCK_STOCKS = {
   },
 }
 
+import { STOCK_LIST } from './stockList'
+
+// stockList에 있는 종목에 대해 동적으로 Mock 데이터 생성
+function generateMockStock(info) {
+  // 종목코드 기반 시드로 일관된 난수 생성
+  const seed = parseInt(info.code, 10)
+  const pseudo = (n) => ((seed * 1103515245 + n * 12345) >>> 0) % 1000
+
+  const basePrice = 5000 + pseudo(1) * 200
+  const changeRate = ((pseudo(2) % 200) - 100) / 100  // -1.00 ~ +1.00
+  const change = Math.round(basePrice * changeRate / 100)
+  const prevClose = basePrice - change
+  const marketCapBase = info.market === 'KOSPI'
+    ? (pseudo(3) + 100) * 100000000000
+    : (pseudo(3) + 10) * 10000000000
+
+  const weekRate  = ((pseudo(4) % 1200) - 600) / 100
+  const monthRate = ((pseudo(5) % 2000) - 1000) / 100
+  const yearRate  = ((pseudo(6) % 6000) - 3000) / 100
+
+  return {
+    code: info.code,
+    name: info.name,
+    market: info.market,
+    currentPrice: basePrice,
+    prevClose,
+    change,
+    changeRate: Math.round(changeRate * 100) / 100,
+    marketCap: marketCapBase,
+    volume: (pseudo(7) + 10) * 10000,
+    high: basePrice + Math.abs(Math.round(basePrice * 0.01)),
+    low: basePrice - Math.abs(Math.round(basePrice * 0.01)),
+    open: prevClose + Math.round(change * 0.3),
+    returns: {
+      week: Math.round(weekRate * 100) / 100,
+      month: Math.round(monthRate * 100) / 100,
+      year: Math.round(yearRate * 100) / 100,
+    },
+    dividends: [
+      { year: 2023, total: pseudo(8) * 2, yield: Math.round(pseudo(9) / 50) / 100 },
+      { year: 2024, total: pseudo(8) * 2 + pseudo(1) * 0.5, yield: Math.round((pseudo(9) + 10) / 50) / 100 },
+    ],
+    news: [
+      {
+        title: `${info.name}, 실적 개선 기대감에 주목`,
+        press: '한국경제',
+        url: `https://www.hankyung.com/search?query=${encodeURIComponent(info.name)}`,
+        date: '2026-04-21',
+      },
+      {
+        title: `${info.name} 주가 동향 분석`,
+        press: '매일경제',
+        url: `https://www.mk.co.kr/search/?word=${encodeURIComponent(info.name)}`,
+        date: '2026-04-20',
+      },
+      {
+        title: `증권가, ${info.name} 목표주가 상향 조정`,
+        press: '이데일리',
+        url: `https://www.edaily.co.kr/search/index?source=${encodeURIComponent(info.name)}`,
+        date: '2026-04-19',
+      },
+    ],
+    youtube: [
+      {
+        title: `${info.name} 주가 분석 - 지금 사도 될까?`,
+        channel: '주식투자연구소',
+        thumbnail: '',
+        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(info.name + ' 주가')}`,
+      },
+      {
+        title: `${info.name} 실적 완전 분석`,
+        channel: '재테크TV',
+        thumbnail: '',
+        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(info.name + ' 실적')}`,
+      },
+      {
+        title: `${info.name} 투자 전망 2026`,
+        channel: '경제읽어드림',
+        thumbnail: '',
+        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(info.name + ' 전망')}`,
+      },
+    ],
+  }
+}
+
 // 종목명 또는 코드로 검색
 export function searchMockStock(query) {
   const q = query.trim()
   if (!q) return null
 
-  // 코드로 직접 검색
+  // 상세 Mock 데이터에서 우선 검색 (코드)
   if (MOCK_STOCKS[q]) return MOCK_STOCKS[q]
 
-  // 이름으로 검색 (부분 일치)
-  const found = Object.values(MOCK_STOCKS).find(
+  // 상세 Mock 데이터에서 이름으로 검색
+  const detailed = Object.values(MOCK_STOCKS).find(
     (s) => s.name.includes(q) || s.name === q
   )
-  return found || null
+  if (detailed) return detailed
+
+  // stockList에서 코드 또는 이름으로 검색 후 동적 Mock 생성
+  const info = STOCK_LIST.find(
+    (s) => s.code === q || s.name.includes(q) || s.name === q
+  )
+  if (info) return generateMockStock(info)
+
+  return null
 }
