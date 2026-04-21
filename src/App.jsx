@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AlertCircle, Loader2, TrendingUp } from 'lucide-react'
 import SearchBar from './components/SearchBar'
 import WatchList from './components/WatchList'
+import ThemeStocks from './components/ThemeStocks'
 import BasicInfoBlock from './components/blocks/BasicInfoBlock'
 import ReturnsBlock from './components/blocks/ReturnsBlock'
 import DividendBlock from './components/blocks/DividendBlock'
@@ -57,6 +58,11 @@ export default function App() {
             onSelect={handleSearch}
             onRemove={removeFromWatchList}
           />
+        </div>
+
+        {/* 테마주 탐색 */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <ThemeStocks onSelect={handleSearch} />
         </div>
 
         {/* 로딩 */}

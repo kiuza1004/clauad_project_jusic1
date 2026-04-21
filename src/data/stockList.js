@@ -103,6 +103,43 @@ export const STOCK_LIST = [
   { code: '005070', name: '코스모신소재', market: 'KOSPI' },
   { code: '373220', name: 'LG에너지솔루션', market: 'KOSPI' },
   { code: '272210', name: 'HD현대에너지솔루션', market: 'KOSPI' },
+
+  // 방산/우주항공
+  { code: '012450', name: '한화에어로스페이스', market: 'KOSPI' },
+  { code: '079550', name: 'LIG넥스원', market: 'KOSPI' },
+  { code: '064350', name: '현대로템', market: 'KOSPI' },
+  { code: '047810', name: '한국항공우주', market: 'KOSPI' },
+  { code: '065450', name: '빅텍', market: 'KOSDAQ' },
+  { code: '010820', name: '퍼스텍', market: 'KOSDAQ' },
+  { code: '000880', name: '한화', market: 'KOSPI' },
+
+  // 조선/해운
+  { code: '009540', name: '한국조선해양', market: 'KOSPI' },
+  { code: '010140', name: '삼성중공업', market: 'KOSPI' },
+  { code: '329180', name: 'HD현대중공업', market: 'KOSPI' },
+  { code: '042660', name: '한화오션', market: 'KOSPI' },
+  { code: '267250', name: 'HD현대', market: 'KOSPI' },
+
+  // AI/소프트웨어
+  { code: '042700', name: '한미반도체', market: 'KOSPI' },
+  { code: '304100', name: '솔트룩스', market: 'KOSDAQ' },
+  { code: '315640', name: '딥노이드', market: 'KOSDAQ' },
+  { code: '403550', name: '쏘카', market: 'KOSPI' },
+  { code: '950170', name: '카카오뱅크', market: 'KOSPI' },
+  { code: '377300', name: '카카오페이', market: 'KOSPI' },
+
+  // 선거/정치 테마
+  { code: '032820', name: '우리기술', market: 'KOSDAQ' },
+  { code: '001570', name: '금양', market: 'KOSPI' },
+  { code: '065500', name: '오리엔트정공', market: 'KOSDAQ' },
+  { code: '064640', name: '에스엠코어', market: 'KOSDAQ' },
+  { code: '039720', name: '디오', market: 'KOSDAQ' },
+
+  // 건설/인프라
+  { code: '028050', name: '삼성엔지니어링', market: 'KOSPI' },
+  { code: '000210', name: 'DL', market: 'KOSPI' },
+  { code: '047040', name: 'DL이앤씨', market: 'KOSPI' },
+  { code: '000990', name: 'DB하이텍', market: 'KOSPI' },
 ]
 
 export function suggestStocks(query) {

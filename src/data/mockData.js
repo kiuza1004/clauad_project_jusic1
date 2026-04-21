@@ -275,25 +275,42 @@ function generateMockStock(info) {
   }
 }
 
+function nameToCode(name) {
+  let hash = 5381
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) + hash + name.charCodeAt(i)) >>> 0
+  }
+  return String(100000 + (hash % 900000))
+}
+
 // 종목명 또는 코드로 검색
 export function searchMockStock(query) {
   const q = query.trim()
   if (!q) return null
+  const ql = q.toLowerCase()
 
   // 상세 Mock 데이터에서 우선 검색 (코드)
   if (MOCK_STOCKS[q]) return MOCK_STOCKS[q]
 
-  // 상세 Mock 데이터에서 이름으로 검색
+  // 상세 Mock 데이터에서 이름으로 검색 (대소문자 무시)
   const detailed = Object.values(MOCK_STOCKS).find(
-    (s) => s.name.includes(q) || s.name === q
+    (s) => s.name.toLowerCase().includes(ql) || s.code === q
   )
   if (detailed) return detailed
 
-  // stockList에서 코드 또는 이름으로 검색 후 동적 Mock 생성
+  // stockList에서 코드 또는 이름으로 검색 후 동적 Mock 생성 (대소문자 무시)
   const info = STOCK_LIST.find(
-    (s) => s.code === q || s.name.includes(q) || s.name === q
+    (s) => s.code === q || s.name.toLowerCase().includes(ql) || s.name.toLowerCase() === ql
   )
   if (info) return generateMockStock(info)
+
+  // 리스트에 없는 종목도 생성: 6자리 코드 또는 이름 기반 폴백
+  if (/^\d{6}$/.test(q)) {
+    return generateMockStock({ code: q, name: q, market: 'KOSPI' })
+  }
+  if (q.length >= 2) {
+    return generateMockStock({ code: nameToCode(q), name: q, market: 'KOSPI' })
+  }
 
   return null
 }
